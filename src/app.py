@@ -37,22 +37,26 @@ def check():
 
 class QueryRequest(BaseModel):
     query: str
-    
+
 @app.post("/search")
 def search_endpoint(request: QueryRequest):
     if not request.query.strip():
         return []
 
-    results = search(
+    results, query_embedding = search(
         request.query,
         all_chunks,
         embeddings,
         generate_embeddings
     )
-    return [
-        {
-            "score": float(score),
-            "text": text
-        }
-        for text, score in results
-    ]
+
+    return {
+        "query_embedding": query_embedding.tolist(),
+        "results": [
+            {
+                "score": float(score),
+                "text": text
+            }
+            for text, score in results
+        ]
+    }
