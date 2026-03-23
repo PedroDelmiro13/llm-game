@@ -40,6 +40,9 @@ class QueryRequest(BaseModel):
     
 @app.post("/search")
 def search_endpoint(request: QueryRequest):
+    if not request.query.strip():
+        return []
+
     results = search(
         request.query,
         all_chunks,

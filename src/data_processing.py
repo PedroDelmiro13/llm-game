@@ -58,7 +58,7 @@ def fetch_pages():
                 ".post",
                 ".entry",
                 ".page"
-        ]:
+            ]:
                 conteudo = soup.select_one(tag)
                 if conteudo:
                     paragrafos = conteudo.find_all("p")
@@ -67,8 +67,14 @@ def fetch_pages():
                 paragrafos = soup.find_all("p")
             
             texto_pagina = " ".join(p.get_text() for p in paragrafos)
-            textos.append(texto_pagina)
-            print(f"  {len(texto_pagina)} caracteres")
+            
+            # só adiciona se tiver mais de 200 caracteres
+            if len(texto_pagina) > 200:
+                textos.append(texto_pagina)
+                print(f"  {len(texto_pagina)} caracteres")
+            else:
+                print(f"  Texto muito curto ({len(texto_pagina)} caracteres) - ignorado")
+                
             time.sleep(1) 
         except Exception as e:
             print(f"  Erro: {e}")
@@ -83,6 +89,9 @@ def clean_text(texto):
 
 def chunk_text(texto, max_caracteres=800, sobreposicao=100):
     frases = re.split(r'(?<=[.!?])\s+', texto)
+    
+    #remove frases muito curtas (menos de 15 caracteres)
+    frases = [f.strip() for f in frases if len(f.strip()) > 15]
     
     if not frases:
         return []
