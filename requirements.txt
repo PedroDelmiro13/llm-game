@@ -1,6 +1,8 @@
-fastapi==0.135.1
-uvicorn==0.41.0
-requests==2.32.5
-beautifulsoup4==4.14.3
-numpy==2.4.3
-sentence-transformers==5.3.0
+--index-url https://download.pytorch.org/whl/cpu
+torch
+sentence-transformers
+fastapi
+uvicorn
+requests
+beautifulsoup4
+numpy
