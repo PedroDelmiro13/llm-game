@@ -31,7 +31,7 @@ def fetch_pages():
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
             }
             
-            response = requests.get(url, timeout=15, verify=False, headers=headers)
+            response = requests.get(url, timeout=10, verify=False, headers=headers)
             
             if response.status_code != 200:
                 print(f"  Status {response.status_code} - página ignorada")
@@ -74,8 +74,7 @@ def fetch_pages():
                 print(f"  {len(texto_pagina)} caracteres")
             else:
                 print(f"  Texto muito curto ({len(texto_pagina)} caracteres) - ignorado")
-                
-            time.sleep(1) 
+
         except Exception as e:
             print(f"  Erro: {e}")
             continue

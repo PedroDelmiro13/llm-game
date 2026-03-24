@@ -9,7 +9,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
-    "https://llm-game-gamma.vercel.app",
+    "https://llm-game-gamma.vercel.app/",
 ]
 
 app.add_middleware(
@@ -20,20 +20,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-print("Iniciando coleta de dados...")
-pages = fetch_pages()
-
 all_chunks = []
-for page in pages:
-    clean = clean_text(page)
-    chunks = chunk_text(clean)
-    all_chunks.extend(chunks)
+embeddings = []
 
-print(f"{len(all_chunks)} chunks")
+@app.on_event("startup")
+def load_data():
+    global all_chunks, embeddings
 
-print("Gerando embeddings...")
-embeddings = generate_embeddings(all_chunks)
-print("Embeddings prontos")
+    print("Carregando dados...")
+
+    pages = fetch_pages()
+
+    for page in pages:
+        clean = clean_text(page)
+        chunks = chunk_text(clean)
+        all_chunks.extend(chunks)
+
+    print(f"{len(all_chunks)} chunks")
+
+    print("Gerando embeddings...")
+    embeddings = generate_embeddings(all_chunks)
+    print("Pronto!")
 
 @app.get("/")
 def check():
@@ -47,8 +54,8 @@ def search_endpoint(request: QueryRequest):
     if not request.query or not request.query.strip():
         return {"results": []}
 
-    if embeddings is None or len(embeddings) == 0:
-        return {"results": []}
+    if not embeddings:
+        return {"status": "loading"}
 
     results, query_embedding = search(
         request.query,

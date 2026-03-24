@@ -7,7 +7,6 @@ def get_model():
         _model = SentenceTransformer("all-MiniLM-L6-v2")
         print("Modelo carregado")
     return _model
-
 def generate_embeddings(texts):
     model = get_model()
     return model.encode(texts)
