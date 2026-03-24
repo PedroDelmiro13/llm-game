@@ -54,8 +54,8 @@ def search_endpoint(request: QueryRequest):
     if not request.query or not request.query.strip():
         return {"results": []}
 
-    if not embeddings:
-        return {"status": "loading"}
+    if embeddings is None or len(embeddings) == 0:
+        return {"status": "loading", "message": "Aguarde, dados ainda carregando..."}
 
     results, query_embedding = search(
         request.query,
@@ -67,10 +67,7 @@ def search_endpoint(request: QueryRequest):
     return {
         "query_embedding": query_embedding.tolist(),
         "results": [
-            {
-                "score": float(score),
-                "text": text
-            }
+            {"score": float(score), "text": text}
             for text, score in results
         ]
     }
