@@ -32,12 +32,10 @@ export default function ChatInterface() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/search', {
+      const response = await fetch('https://llm-game-production.up.railway.app/search', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: input }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: input })
       })
 
       if (!response.ok) {
@@ -108,9 +106,8 @@ export default function ChatInterface() {
         {messages.map((message, index) => (
           <div key={index} className="space-y-2">
             <div
-              className={`flex ${
-                message.role === 'user' ? 'justify-end' : 'justify-start'
-              }`}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'
+                }`}
             >
               {message.role === 'user' ? (
                 <div className="bg-blue-500 text-white rounded-lg px-4 py-3 max-w-xs lg:max-w-md break-words">
