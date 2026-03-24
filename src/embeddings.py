@@ -4,7 +4,7 @@ def get_model():
     global _model
     if _model is None:
         print("Carregando modelo...")
-        _model = SentenceTransformer("all-MiniLM-L6-v2")
+        _model = SentenceTransformer("paraphrase-MiniLM-L3-v2")
         print("Modelo carregado")
     return _model
 def generate_embeddings(texts):
